@@ -11,7 +11,7 @@ export class Summary extends Component {
         if(calculations.length === 0){
             return null;
         }
-        
+
         return calculations.map((number, index) => {
             const {firstNumber, secondNumber, total} = number;
             return (

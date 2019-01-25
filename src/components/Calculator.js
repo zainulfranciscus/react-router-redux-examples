@@ -9,8 +9,9 @@ export class Calculator extends Component {
             firstNumber:0,
             secondNumber:0,
             total:0,
-            calculations:[]
-        }
+            calculations:[],
+            showSummaryPage: false
+        };
     }
 
     saveCalculation(){
@@ -31,6 +32,9 @@ export class Calculator extends Component {
     render() {
         const {calculations} = this.state;
 
+        if(this.state.showSummaryPage) {
+            return <Summary calculations={calculations}/>;
+        }
 
         return (
             <div>
@@ -44,7 +48,7 @@ export class Calculator extends Component {
                     <p><b>Calculation Done So far</b></p>
                    <Summary calculations={calculations}/>
                 </div>
-                <button onClick="">Open the Summary Page</button>
+                <button onClick={() => {this.setState({showSummaryPage:true})}}>Open the Summary Page</button>
             </div>
         );
     }
