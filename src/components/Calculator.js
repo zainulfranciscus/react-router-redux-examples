@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Summary} from "./Summary";
 
 export class Calculator extends Component {
 
@@ -16,31 +17,20 @@ export class Calculator extends Component {
         const {firstNumber, secondNumber,calculations} = this.state;
         const total = parseInt(firstNumber) + parseInt(secondNumber);
 
-        calculations.push({
-            firstNumber: firstNumber,
-            secondNumber: secondNumber,
-            total: total
-        });
+        const calculation = {
+            firstNumber,
+            secondNumber,
+            total
+        };
 
-        this.setState({
-            firstNumber: firstNumber,
-            secondNumber: secondNumber,
-            total: total,
-            calculations: calculations
-        });
+        calculations.push(calculation);
+
+        this.setState(Object.assign({calculations},calculation));
     }
 
     render() {
         const {calculations} = this.state;
 
-        const listOfCalculations = calculations.map((number, index) => {
-            const {firstNumber, secondNumber, total} = number;
-            return (
-                <ul key={index}>
-                    <li>{firstNumber} + {secondNumber} = {total}</li>
-                </ul>
-            )
-        });
 
         return (
             <div>
@@ -52,8 +42,9 @@ export class Calculator extends Component {
                 <label id="result">{this.state.total}</label>
                 <div>
                     <p><b>Calculation Done So far</b></p>
-                    {listOfCalculations}
+                   <Summary calculations={calculations}/>
                 </div>
+                <button onClick="">Open the Summary Page</button>
             </div>
         );
     }
