@@ -1,54 +1,54 @@
 import React, {Component} from 'react';
-import {Summary} from "./Summary";
+import SummaryContainer from './SummaryContainer';
 
 export class Calculator extends Component {
 
     constructor(props){
         super(props);
         this.state = {
-            firstNumber:0,
-            secondNumber:0,
-            total:0,
-            calculations:[],
             showSummaryPage: false
         };
+
+        this.saveCalculation = this.saveCalculation.bind(this);
+        this.displaySummaryPage = this.displaySummaryPage.bind(this);
+        this.dispatchNumber = this.dispatchNumber.bind(this);
     }
 
-    saveCalculation(){
-        const {firstNumber, secondNumber,calculations} = this.state;
-        const total = parseInt(firstNumber) + parseInt(secondNumber);
-
-        const calculation = {
-            firstNumber,
-            secondNumber,
-            total
-        };
-
-        calculations.push(calculation);
-
-        this.setState(Object.assign({calculations},calculation));
+    saveCalculation () {
+        this.props.saveCalculation();
     }
+
+    displaySummaryPage () {
+        this.setState({
+            showSummaryPage: true
+        });
+    }
+
+    dispatchNumber (number, isFirstNumber=true) {
+        this.props.dispatchNumber(number, isFirstNumber);
+    }
+
 
     render() {
-        const {calculations} = this.state;
 
         if(this.state.showSummaryPage) {
-            return <Summary calculations={calculations}/>;
+            return <SummaryContainer/>;
         }
 
         return (
             <div>
-                <input name="firstNumber" type="text" onChange={e => this.state.firstNumber = e.target.value}/>
-                <button onClick={this.saveCalculation.bind(this)}>+</button>
-                <input name="secondNumber" type="text" onChange={e => this.state.secondNumber = e.target.value}/>
+                today's date: {Date.now()} <br/>
+                <input name="firstNumber" type="text" onChange={e => this.dispatchNumber(e.target.value)}/>
+                <button onClick={this.saveCalculation}>+</button>
+                <input name="secondNumber" type="text" onChange={e => this.dispatchNumber(e.target.value,false)}/>
                 =
                 <label name="result" type="label"/>
-                <label id="result">{this.state.total}</label>
+                <label id="result">{this.props.total}</label>
                 <div>
-                    <p><b>Calculation Done So far</b></p>
-                   <Summary calculations={calculations}/>
+                    <p><b>Summary</b></p>
+                   <SummaryContainer/>
                 </div>
-                <button onClick={() => {this.setState({showSummaryPage:true})}}>Open the Summary Page</button>
+                <button onClick={this.displaySummaryPage}>Open the Summary Page</button>
             </div>
         );
     }
